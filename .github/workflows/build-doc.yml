@@ -44,24 +44,6 @@ jobs:
             --pdf-engine=xelatex \
             -V mainfont="DejaVu Sans"
 
-      - name: Update README.md with download links and timestamp
-        run: |
-          echo "# Instructivo Linux" > README.md
-          echo "" >> README.md
-          echo "[![Build](https://github.com/pablosambuco/instructivo_linux/actions/workflows/build-doc.yml/badge.svg)](https://github.com/pablosambuco/instructivo_linux/actions/workflows/build-doc.yml)" >> README.md
-          echo "" >> README.md
-          echo "Este repositorio contiene un instructivo en formato Markdown sobre comandos útiles en Linux." >> README.md
-          echo "Con cada actualización se generan automáticamente una versión HTML y otra en PDF." >> README.md
-          echo "" >> README.md
-          echo "## Descargas automáticas" >> README.md
-          echo "" >> README.md
-          echo "- [Ver HTML](./instructivo_linux.html)" >> README.md
-          echo "- [Descargar PDF](./instructivo_linux.pdf)" >> README.md
-          echo "" >> README.md
-          echo "_Generado automáticamente con GitHub Actions._" >> README.md
-          echo "" >> README.md
-          echo "Última generación: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> README.md
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -69,10 +51,11 @@ jobs:
           name: Última documentación
           body: Versión actualizada
           draft: false
-          prerelease: false          
+          prerelease: false
+          delete_existing: true
           files: |
             instructivo_linux.html
             instructivo_linux.pdf
-          delete_existing: true
+            instructivo_linux.md
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
