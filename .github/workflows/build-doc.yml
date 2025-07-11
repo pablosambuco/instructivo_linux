@@ -22,27 +22,36 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Install dependencies
+      - name: Install dependencies (pandoc + xelatex)
         run: |
           sudo apt-get update
-          sudo apt-get install -y pandoc python3-pip
-          pip install weasyprint
+          sudo apt-get install -y \
+            pandoc \
+            texlive-latex-base \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-latex-extra \
+            fonts-dejavu \
+            lmodern
 
       - name: Convert Markdown to HTML
         run: |
           pandoc instructivo_linux.md -o instructivo_linux.html
 
-      - name: Convert HTML to PDF using WeasyPrint
+      - name: Convert Markdown to PDF using xelatex
         run: |
-          weasyprint instructivo_linux.html instructivo_linux.pdf
+          pandoc instructivo_linux.md -o instructivo_linux.pdf \
+            --pdf-engine=xelatex \
+            -V mainfont="DejaVu Sans"
 
-      - name: Update README.md with download links
+      - name: Update README.md with download links and timestamp
         run: |
           echo "# Instructivo Linux" > README.md
           echo "" >> README.md
-          echo "[![Build](https://github.com/tu_usuario/tu_repositorio/actions/workflows/build-doc.yml/badge.svg)](https://github.com/tu_usuario/tu_repositorio/actions/workflows/build-doc.yml)" >> README.md
+          echo "[![Build](https://github.com/pablosambuco/instructivo_linux/actions/workflows/build-doc.yml/badge.svg)](https://github.com/pablosambuco/instructivo_linux/actions/workflows/build-doc.yml)" >> README.md
           echo "" >> README.md
           echo "Este repositorio contiene un instructivo en formato Markdown sobre comandos útiles en Linux." >> README.md
+          echo "Con cada actualización se generan automáticamente una versión HTML y otra en PDF." >> README.md
           echo "" >> README.md
           echo "## Descargas automáticas" >> README.md
           echo "" >> README.md
