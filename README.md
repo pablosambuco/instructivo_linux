@@ -1,8 +1,9 @@
 # Instructivo Linux
 
-[![Build](https://github.com/tu_usuario/tu_repositorio/actions/workflows/build-doc.yml/badge.svg)](https://github.com/tu_usuario/tu_repositorio/actions/workflows/build-doc.yml)
+[![Build](https://github.com/pablosambuco/instructivo_linux/actions/workflows/build-doc.yml/badge.svg)](https://github.com/pablosambuco/instructivo_linux/actions/workflows/build-doc.yml)
 
 Este repositorio contiene un instructivo en formato Markdown sobre comandos útiles en Linux.
+Con cada actualización se generan automáticamente una versión HTML y otra en PDF.
 
 ## Descargas automáticas
 
@@ -11,4 +12,4 @@ Este repositorio contiene un instructivo en formato Markdown sobre comandos úti
 
 _Generado automáticamente con GitHub Actions._
 
-Última generación: 2025-07-11 14:44:57 UTC
+Última generación: 2025-07-11 20:05:45 UTC
