@@ -1,0 +1,68 @@
+name: Build Markdown to HTML and PDF
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Git config
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            pandoc \
+            texlive-latex-base \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-latex-extra \
+            fonts-dejavu \
+            lmodern
+
+      - name: Convert Markdown to HTML
+        run: |
+          pandoc instructivo_linux.md -o instructivo_linux.html
+
+      - name: Convert Markdown to PDF (Arial-like font)
+        run: |
+          pandoc instructivo_linux.md -o instructivo_linux.pdf \
+            --pdf-engine=xelatex \
+            -V mainfont="DejaVu Sans"
+
+      - name: Update README.md with download links
+        run: |
+          echo "# Instructivo Linux" > README.md
+          echo "" >> README.md
+          echo "[![Build](https://github.com/tu_usuario/tu_repositorio/actions/workflows/build-doc.yml/badge.svg)](https://github.com/tu_usuario/tu_repositorio/actions/workflows/build-doc.yml)" >> README.md
+          echo "" >> README.md
+          echo "Este repositorio contiene un instructivo en formato Markdown sobre comandos útiles en Linux." >> README.md
+          echo "" >> README.md
+          echo "## Descargas automáticas" >> README.md
+          echo "" >> README.md
+          echo "- [Ver HTML](./instructivo_linux.html)" >> README.md
+          echo "- [Descargar PDF](./instructivo_linux.pdf)" >> README.md
+          echo "" >> README.md
+          echo "_Generado automáticamente con GitHub Actions._" >> README.md
+          echo "" >> README.md
+          echo "Última generación: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> README.md
+
+      - name: Commit and push updated files
+        run: |
+          git add instructivo_linux.html instructivo_linux.pdf README.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Actualizar documentación generada automáticamente"
+            git push
+          fi
