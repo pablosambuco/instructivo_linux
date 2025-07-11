@@ -34,6 +34,10 @@ jobs:
             fonts-dejavu \
             lmodern
 
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get install -y gh
+
       - name: Convert Markdown to HTML
         run: |
           pandoc instructivo_linux.md -o instructivo_linux.html
@@ -44,6 +48,18 @@ jobs:
             --pdf-engine=xelatex \
             -V mainfont="DejaVu Sans"
 
+      - name: Remove existing assets for tag 'latest'
+        run: |
+          RELEASE_ID=$(gh api repos/${{ github.repository }}/releases/tags/latest --jq '.id')
+          for ASSET in instructivo_linux.html instructivo_linux.pdf instructivo_linux.md; do
+            ASSET_ID=$(gh api repos/${{ github.repository }}/releases/${RELEASE_ID}/assets --jq ".[] | select(.name == \\"$ASSET\\") | .id")
+            if [ ! -z "$ASSET_ID" ]; then
+              gh api --method DELETE repos/${{ github.repository }}/releases/assets/${ASSET_ID}
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
@@ -52,7 +68,6 @@ jobs:
           body: Versión actualizada
           draft: false
           prerelease: false
-          delete_existing: true
           files: |
             instructivo_linux.html
             instructivo_linux.pdf
