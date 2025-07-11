@@ -31,6 +31,7 @@ ls
 ```
 
 Parámetros:
+
 - `-l`: listado amplio (muestra permisos)
 - `-a`: muestra todos los archivos (incluyendo ocultos)
 - `-t`: ordena cronológicamente
@@ -91,6 +92,7 @@ rm -rf carpeta
 ```
 
 Parámetros:
+
 - `-f`: fuerza la eliminación sin pedir confirmación
 - `-r`: recursivo
 
@@ -103,6 +105,7 @@ cd ruta/al/directorio
 ```
 
 Directorios especiales:
+
 - `.`: actual
 - `..`: superior
 - `~`: home
@@ -127,6 +130,7 @@ Los permisos se representan de dos maneras: texto y números.
 ### Modo numérico
 
 Suma de valores:
+
 - `4`: lectura
 - `2`: escritura
 - `1`: ejecución
@@ -138,6 +142,7 @@ chmod 754 archivo
 ```
 
 Equivale a:
+
 - Usuario: `7` (4+2+1) → `rwx`
 - Grupo: `5` (4+0+1) → `r-x`
 - Otros: `4` (4+0+0) → `r--`
@@ -235,6 +240,7 @@ ps -f | grep -i listado
 ```
 
 Parámetros:
+
 - `-i`: ignora mayúsculas
 - `-v`: niega la condición
 - `-l`: muestra nombre de archivos
@@ -314,6 +320,7 @@ Otros ejemplos:
 
 ```bash
 #!/bin/sh         # Shell POSIX
+#!/bin/ksh        # Korn Shell
 #!/usr/bin/env python3  # Usa el intérprete de Python 3 que esté en el entorno
 ```
 
