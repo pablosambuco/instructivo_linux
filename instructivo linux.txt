@@ -1,0 +1,177 @@
+Listar archivos y directorios:
+ls
+    parametros: 
+       -l => listado amplio (muestra permisos de archivo)
+       -a => todos los archivos
+       -t => ordena cronologicamente
+       -r => invierte el orden
+       -R => recursivo
+       
+       ej: 
+           ls -ltr => trae el listado amplio ordenado de mas viejo a mas nuevo
+           l  => es un alias para ls
+           ll => es un alias para ls -l
+           la => es un alias para ls -a
+
+Crear directorios:
+mkdir
+
+Eliminar directorios:
+rmdir
+
+Elimina archivos
+rm 
+    parametros:
+        -f => fuerza el borrado y no pregunta nada
+        -r => recursivo
+        
+        ej:
+           rm -rf directorio_old => borra el directorio y todos los archivos y subdirectorios que contiene
+
+Cambiar directorio actual
+cd
+    directorios especiales:
+    . => dir actual
+    .. => dir superior
+    ~ => home del usuario
+    / => raiz del sistema
+    - => directorio anterior donde estuve
+    
+Permisos de archivos y directorios:
+Se pueden ver 2 maneras distintas, como texto o como valores numéricos.
+
+Texto:
+   --------- => 9 posiciones, 3 para el propietario, 3 para el grupo, 3 para otros
+   r: lectura
+   w: escritura
+   x: ejecucion (en un directorio permite poder listar el contenido)
+
+Numéricos:
+Con la misma lógica de las posiciones (usuario, grupo, otros), se "codifica" el permiso en binario y luego se suman los pesos 
+
+           pesos  421 421 421
+   rwx rwx rwx => 111 111 111 => 777
+   r-x r-- r-- => 101 100 100 => 544
+
+Cambiar los permisos de un archivo:
+chmod [permisos] archivo
+   puede utilizarse el valor numérico:
+   ej:
+      chmod 777 archivo (le da los 3 permisos a todo el mundo)
+   
+   o sumar o restar permisos con los valores de texto
+   ej:
+      chmod u+x archivo (le suma al usuario permiso de ejecucion) 
+      chmod go-wx archivo (le quita escritura y ejecucion al grupo y otros)
+
+Cambiar el usuario o grupo de un archivo:
+son comandos similares al chmod:
+chown
+   ej: chown usuario1 archivo (hace que el usuario usuario1 sea el propietario del archivo)
+chgrp
+   ej: chgrp grupo1 archivo (hace que el grupo grupo1 sea el grupo asociado al archivo)
+      
+      
+Maneras de ejecutar programas en linux:
+
+si el comando está en el un directorio que se indica en el PATH, sólo hay que poner el comando, por ejemplo "listar.sh"
+si el comando/programa está en el directorio actual: "./listar.sh"
+si queremos ejecutar algo en background (sin que quede "atado" a nuestra terminal), se agrega & al final: "./listar.sh &"
+si queremos ejecutar algo en background y poder cerrar la ventana o evitar problemas de conexión, se usa el no-hangup: "nohup ./listar.sh &". La salida por pantalla irá al archivo nohup.out.
+si queremos ver las cosas que se están ejecutando en background: jobs
+si queremos hacer que la salida "por pantalla" de un comando sea la entrada de otro: comando1 | comando2
+si queremos ejecutar uno a continuacion del otro, se separan con ";": "listar.sh; borrar.sh"
+si queremos ejecutar uno a continuacion del otro, pero solo cuando el primero haya terminado bien (retorno 0), se usa &&: "listar.sh && borrar.sh"
+si queremos sacar la salida "por pantalla" a un archivo: 
+   listar.sh > listado.txt  (crea el archivo o lo reemplaza si existe)
+   listar.sh >> listado.txt (concatena a lo que ya tenga el archivo)
+   borrar.sh 1>borrado.log 2>borrado.err // saca el log y la salida de errores a 2 archivos distintos
+si queremos tomar la entrada desde un archivo:
+   comando < archivo.txt
+si queremos tomar la entrada desde un archivo y sacar la salida a otro(s) archivo(s):
+   comando < entrada.txt > salida.txt
+   comando < entrada.txt 1> salida.log 2> salida.err
+   
+Para ver los procesos que se estan ejecutando (procesos no son necesariamente los programas que ejecuté yo)
+   ps
+     -f => listado amplo
+     -e => de todos los usuarios
+     -u nombre => del usuario especifico que diga "nombre"
+   
+   ej:
+      ps -fu siglo => muestra todos los procesos que se están ejecutando con el usuario siglo
+   
+Para matar un proceso que tenga algun problema
+   kill (en realidad manda señales, no necesariamente mata)
+      -l listado de señales
+      -9 es KILL, mata el proceso sin esperar
+      -15 (default), pide al proceso que termine
+
+      En Red-Hat, el listado de señales es el siguiente:
+      
+       1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL       5) SIGTRAP
+       6) SIGABRT      7) SIGBUS       8) SIGFPE       9) SIGKILL     10) SIGUSR1
+      11) SIGSEGV     12) SIGUSR2     13) SIGPIPE     14) SIGALRM     15) SIGTERM
+      16) SIGSTKFLT   17) SIGCHLD     18) SIGCONT     19) SIGSTOP     20) SIGTSTP
+      21) SIGTTIN     22) SIGTTOU     23) SIGURG      24) SIGXCPU     25) SIGXFSZ
+      26) SIGVTALRM   27) SIGPROF     28) SIGWINCH    29) SIGIO       30) SIGPWR
+      31) SIGSYS      34) SIGRTMIN    35) SIGRTMIN+1  36) SIGRTMIN+2  37) SIGRTMIN+3
+      38) SIGRTMIN+4  39) SIGRTMIN+5  40) SIGRTMIN+6  41) SIGRTMIN+7  42) SIGRTMIN+8
+      43) SIGRTMIN+9  44) SIGRTMIN+10 45) SIGRTMIN+11 46) SIGRTMIN+12 47) SIGRTMIN+13
+      48) SIGRTMIN+14 49) SIGRTMIN+15 50) SIGRTMAX-14 51) SIGRTMAX-13 52) SIGRTMAX-12
+      53) SIGRTMAX-11 54) SIGRTMAX-10 55) SIGRTMAX-9  56) SIGRTMAX-8  57) SIGRTMAX-7
+      58) SIGRTMAX-6  59) SIGRTMAX-5  60) SIGRTMAX-4  61) SIGRTMAX-3  62) SIGRTMAX-2
+      63) SIGRTMAX-1  64) SIGRTMAX
+
+      ej:
+         kill -9 4561        => envía la señal SIGKILL (fuerza la salida) al proceso con PID 4561
+         kill -SIGSTOP 8723  => envía la señal SIGSTOP (detener) al proceso con PID 8723. El proceso queda detenido, no muere. Es igual a apretar Ctrl+Z en el teclado
+         kill -18      8723  => envía la señal SIGCONT (continuar) al proceso detenido anteriormente. El proceso continúa.
+         kill -2 45612       => envía una señal SIGNIN (interrupción). Es igual a apretar Ctrl+C en el teclado
+         
+      Cada proceso puede tener programado el uso de señales para comunicarse con otros.
+      Por ejemplo, las señales 10 y 12 no hacen nada, salvo que el programador lo explicite en el código del programa.
+      Mas info: https://es.wikipedia.org/wiki/Señal_(informática)
+      
+Para buscar un texto dentro de archivos (o en la salida de otro comando)
+   grep
+      -i ignora mayusculas/minusculas
+      -v niega la condicion
+      -l sólo muestra los nombre/s del/os archivo/s en que existe el texto buscado
+      -n muestra el número de línea
+      --color resalta en color el texto que buscamos
+   
+   ej:
+      ps -f | grep -i listado  => muestra la salida de ps -f que incluya "listado" sin tener en cuenta mayusculas/minusculas   
+      grep Juan usuarios.txt   => muestra las líneas del archivo usuarios.txt que contengan el texto "Juan"
+   
+   existe otra versión de este comando, que es egrep, que utiliza expresiones regulares para los filtros (https://es.wikipedia.org/wiki/regex)
+
+Recortar archivos:
+   head [-X] archivo 
+      Recorta los primeros X registros del archivo y lo saca por pantalla.
+      Si no se especifica el -X, recorta 10.
+      
+   ej:
+      head -20 archivo.txt > salida.txt  => pasa los primeros 20 registros de archivo.txt a salida.txt
+      
+   
+   tail [-X] archivo 
+      Recorta los últimos X registros del archivo y lo saca por pantalla.
+      Si no se especifica el -X, recorta 10.
+      
+      Si se especifica -f en lugar de un número, queda esperando que alguien escriba en el archivo y lo muestra por pantalla.
+      
+   ej:
+      tail -20 archivo.txt > salida.txt  => pasa los últimos 20 registros de archivo.txt a salida.txt 
+      tail -f nohup.out => muestra lo que se va escribiendo en ese archivo
+
+Para recortar algunos caracteres o campos de un archivo:
+   cut -c1-20 archivo
+      Recorta los caracteres entre el 1 y el 20 para todos los registros que contenga el archivo
+      
+   cut -d'X' -f1-3 archivo
+      Recorta los campos 1 a 3, tomando como separador el caracter X
+      
+Para ejecutar un comando y guardar su salida en una variable
+   VARIABLE=`comando`
