@@ -62,10 +62,17 @@ jobs:
           echo "" >> README.md
           echo "Última generación: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> README.md
 
-      - name: Commit and push updated files
-        run: |
-          git add instructivo_linux.html instructivo_linux.pdf README.md
-          if ! git diff --cached --quiet; then
-            git commit -m "Actualizar documentación generada automáticamente"
-            git push
-          fi
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: Última documentación
+          body: Versión actualizada
+          draft: false
+          prerelease: false          
+          files: |
+            instructivo_linux.html
+            instructivo_linux.pdf
+          delete_existing: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}          
