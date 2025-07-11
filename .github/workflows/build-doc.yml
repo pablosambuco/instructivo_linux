@@ -52,8 +52,8 @@ jobs:
         run: |
           RELEASE_ID=$(gh api repos/${{ github.repository }}/releases/tags/latest --jq '.id')
           for ASSET in instructivo_linux.html instructivo_linux.pdf instructivo_linux.md; do
-            ASSET_ID=$(gh api repos/${{ github.repository }}/releases/${RELEASE_ID}/assets --jq ".[] | select(.name == \\"$ASSET\\") | .id")
-            if [ ! -z "$ASSET_ID" ]; then
+            ASSET_ID=$(gh api repos/${{ github.repository }}/releases/${RELEASE_ID}/assets --jq '.[] | select(.name == "'$ASSET'") | .id')
+            if [ -n "$ASSET_ID" ]; then
               gh api --method DELETE repos/${{ github.repository }}/releases/assets/${ASSET_ID}
             fi
           done
