@@ -39,11 +39,13 @@ Parámetros:
 - `-R`: listado recursivo
 
 Ejemplos:
+
 ```bash
 ls -ltr
 ```
 
 Alias comunes:
+
 - `l` → `ls`
 - `ll` → `ls -l`
 - `la` → `ls -a`
@@ -171,22 +173,26 @@ chgrp grupo archivo
 ## Ejecutar programas
 
 - Si está en `$PATH`:
+
   ```bash
   listar.sh
   ```
 
 - Si está en el directorio actual:
+
   ```bash
   ./listar.sh
   ```
 
 - En background:
+
   ```bash
   ./listar.sh &
   nohup ./listar.sh &
   ```
 
 - Composición de comandos:
+
   ```bash
   comando1 | comando2
   comando1 && comando2
@@ -298,9 +304,6 @@ alias actualizar='sudo apt update && sudo apt upgrade'
 man comando
 comando --help
 ```
-
----
-
 
 ---
 
